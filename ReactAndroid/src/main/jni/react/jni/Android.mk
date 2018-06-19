@@ -1,3 +1,5 @@
+APP_ALLOW_MISSING_DEPS=true
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
