@@ -698,9 +698,13 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+      Log.i("IGORM", this + ": onTextChanged began");
+
       // Rearranging the text (i.e. changing between singleline and multiline attributes) can
       // also trigger onTextChanged, call the event in JS only when the text actually changed
       if (count == 0 && before == 0) {
+
+        Log.i("IGORM", this + ": onTextChanged shortcut");
         return;
       }
 
@@ -727,6 +731,8 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
               oldText,
               start,
               start + before));
+
+      Log.i("IGORM", this + ": onTextChanged ended");
     }
 
     @Override
