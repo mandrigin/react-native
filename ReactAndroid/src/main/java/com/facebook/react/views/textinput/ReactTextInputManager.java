@@ -53,6 +53,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import android.util.Log;
 import javax.annotation.Nullable;
+import android.os.SystemClock;
 
 /**
  * Manages instances of TextInput.
@@ -699,13 +700,13 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-      Log.i("IGORM", this + ": onTextChanged began");
+      long startTimeMs = SystemClock.elapsedRealtime();
 
       // Rearranging the text (i.e. changing between singleline and multiline attributes) can
       // also trigger onTextChanged, call the event in JS only when the text actually changed
       if (count == 0 && before == 0) {
-
-        Log.i("IGORM", this + ": onTextChanged shortcut");
+        long spent = SystemClock.elapsedRealtime() - startTimeMs;
+        Log.i("IGORM", this + ": onTextChanged shortcut, spent: " + String.valueOf(spent));
         return;
       }
 
@@ -714,6 +715,8 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
       String oldText = mPreviousText.substring(start, start + before);
       // Don't send same text changes
       if (count == before && newText.equals(oldText)) {
+        long spent = SystemClock.elapsedRealtime() - startTimeMs;
+        Log.i("IGORM", this + ": onTextChanged ended -- don't send the same text, spent: " + String.valueOf(spent));
         return;
       }
 
@@ -733,7 +736,8 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
               start,
               start + before));
 
-      Log.i("IGORM", this + ": onTextChanged ended");
+      long spent = SystemClock.elapsedRealtime() - startTimeMs;
+      Log.i("IGORM", this + ": onTextChanged ended normally, spent: " + String.valueOf(spent));
     }
 
     @Override
