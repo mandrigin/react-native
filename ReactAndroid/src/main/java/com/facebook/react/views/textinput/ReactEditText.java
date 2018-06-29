@@ -42,6 +42,7 @@ import com.facebook.react.views.text.TextInlineImageSpan;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
+import android.util.Log;
 
 /**
  * A wrapper around the EditText that lets us better control what happens when an EditText gets
@@ -356,9 +357,13 @@ public class ReactEditText extends EditText {
       return;
     }
 
+
     // Only set the text if it is up to date.
     mMostRecentEventCount = reactTextUpdate.getJsEventCounter();
+
+
     if (mMostRecentEventCount < mNativeEventCount) {
+    Log.i("IGORM", String.format("maybeSetText is called but will be ignored js event: %d nativeEvent: %d", mMostRecentEventCount, mNativeEventCount));
       return;
     }
 
@@ -373,6 +378,8 @@ public class ReactEditText extends EditText {
     mIsSettingTextFromJS = true;
 
     getText().replace(0, length(), spannableStringBuilder);
+
+    Log.i("IGORM", String.format("maybeSetText is called and EXECUTED! js event: %d nativeEvent: %d", mMostRecentEventCount, mNativeEventCount));
 
     mIsSettingTextFromJS = false;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
